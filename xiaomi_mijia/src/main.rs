@@ -37,17 +37,11 @@ fn main() {
             println!("dev: {}", dev);
         }
         for _ in 0..5 {
-            let device = BluetoothDevice::new(
-                bt_session,
-                format!("/org/bluez/hci0/dev_{}", dev.replace(&":", "_")),
-            );
+            let device = BluetoothDevice::new(bt_session, format!("/org/bluez/hci0/dev_{}", dev.replace(&":", "_")));
             match device.connect(10000) {
                 Err(_e) => (), // println!("Failed to connect {:?}: {:?}", device.get_id(), _e),
                 Ok(_) => {
-                    let temp_humidity = BluetoothGATTCharacteristic::new(
-                        bt_session,
-                        device.get_id() + "/service0021/char0035",
-                    );
+                    let temp_humidity = BluetoothGATTCharacteristic::new(bt_session, device.get_id() + "/service0021/char0035");
                     if temp_humidity.start_notify().is_ok() {
                         devices = true;
                         dev_len += 1;
@@ -60,11 +54,7 @@ fn main() {
 
     if devices {
         let mut devid_list = vec![];
-        for event in BluetoothSession::create_session(None)
-            .unwrap()
-            .incoming(10000)
-            .map(BluetoothEvent::from)
-        {
+        for event in BluetoothSession::create_session(None).unwrap().incoming(10000).map(BluetoothEvent::from) {
             if event.is_none() {
                 continue;
             }
@@ -87,20 +77,12 @@ fn main() {
 
             if quiet {
                 if temp_mul10 {
-                    println!(
-                        "{} {} {:?}",
-                        device_id,
-                        (10. * temperature) as i32,
-                        humidity
-                    );
+                    println!("{} {} {:?}", device_id, (10. * temperature) as i32, humidity);
                 } else {
                     println!("{} {:.2} {:?}", device_id, temperature, humidity);
                 }
             } else {
-                println!(
-                    "Device: {}, Temperature: {:.2}ºC Humidity: {:?}%",
-                    device_id, temperature, humidity
-                );
+                println!("Device: {}, Temperature: {:.2}ºC Humidity: {:?}%", device_id, temperature, humidity);
             }
 
             if !devid_list.contains(&device_id) {
