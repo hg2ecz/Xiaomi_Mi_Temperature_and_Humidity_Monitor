@@ -70,12 +70,12 @@ fn main() {
                 _ => continue,
             };
 
-            let mut temperature_array = [0; 2];
-            temperature_array.clone_from_slice(&value[..2]);
-            let temperature = u16::from_le_bytes(temperature_array) as f32 * 0.01;
-            let humidity = value[2];
-
             if !devid_list.contains(&device_id) {
+                let mut temperature_array = [0; 2];
+                temperature_array.clone_from_slice(&value[..2]);
+                let temperature = u16::from_le_bytes(temperature_array) as f32 * 0.01;
+                let humidity = value[2];
+
                 if quiet {
                     if temp_mul10 {
                         println!("{} {} {:?}", device_id, (10. * temperature) as i32, humidity);
@@ -87,6 +87,7 @@ fn main() {
                 }
                 devid_list.push(device_id);
             }
+
             if devid_list.len() >= dev_len {
                 std::process::exit(0);
             }
