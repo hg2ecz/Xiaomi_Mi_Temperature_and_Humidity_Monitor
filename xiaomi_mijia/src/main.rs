@@ -82,7 +82,7 @@ fn main() {
                     println!("{} {:.2} {:?}", device_id, temperature, humidity);
                 }
             } else {
-                println!("Device: {}, Temperature: {:.2}ºC Humidity: {:?}%", device_id, temperature, humidity);
+                println!("Device: {}, Temperature: {:.2}°C Humidity: {:?}%", device_id, temperature, humidity);
             }
 
             if !devid_list.contains(&device_id) {
